@@ -34,6 +34,8 @@ void before_task_create (task_t *task ) {
 
 void after_task_create (task_t *task ) {
     // put your customization here
+    task->remainingTime = 10; 
+    task->scheduler();
 #ifdef DEBUG
     printf("\ntask_create - AFTER - [%d]", task->id);
 #endif
@@ -397,8 +399,20 @@ int after_mqueue_msgs (mqueue_t *queue) {
 }
 
 task_t * scheduler() {
-    // FCFS scheduler
+    // SRTF scheduler
+
     if ( readyQueue != NULL ) {
+        for(int i = 0, i < readyQueue.size, i++){
+            if(task.remainingTime < readyQueue[i].remainingTime){ 
+                task.next = &readyQueue[i];
+                if (i > 0){
+                    readyQueue[i-1].next = &task;
+                    break;
+                }
+            }else if (i = readyQueue-1){
+                readyQueue[i].next = &task;
+            }
+        }
         return readyQueue;
     }
     return NULL;
